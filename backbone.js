@@ -1052,7 +1052,14 @@
     // Ensure that we have the appropriate request data.
     if (!params.data && model && (method == 'create' || method == 'update')) {
       params.contentType = 'application/json';
-      params.data = JSON.stringify(model.toJSON());
+      if (model.namespace) {
+        var namespaced = {};
+        namespaced[model.namespace] = model.toJSON();
+        params.data = JSON.stringify(namespaced);
+      } else {
+        params.data = JSON.stringify(model.toJSON());
+      }
+
     }
 
     // For older servers, emulate JSON by encoding the request into an HTML-form.
